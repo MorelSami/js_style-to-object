@@ -14,12 +14,14 @@ function convertToObject(sourceString) {
   }
 
   sourceString
-    .replaceAll(/^[a-zA-Z]^[!#\w\d.-/%(#)]/g, '')
+    .replaceAll(/[^a-zA-Z!:#\d-./,%(#)][\t\r\b\v\f]/g, '')
     .trim()
     .split(';')
     .forEach((style) => {
-      if (style) {
-        entries.push([...style.split(':').map((x) => x.trim())]);
+      if (style.trim()) {
+        const separator = style.charAt(style.indexOf(':'));
+
+        entries.push([...style.split(separator).map((x) => x.trim())]);
       }
     });
 
