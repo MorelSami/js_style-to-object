@@ -7,12 +7,23 @@
  */
 function convertToObject(sourceString) {
   // write your code here
-  const obj = {};
-  sourceString.split(';').forEach((style) => {
-    const separatorIndex = style.indexOf(':');
-    obj[style.slice(0, separatorIndex)] = style.slice(separatorIndex + 1);
-  });
-  return obj;
+  const entries = [];
+
+  if (!sourceString) {
+    return {};
+  }
+
+  sourceString
+    .replaceAll(/^[a-zA-Z]^[!#\w\d.-/%(#)]/g, '')
+    .trim()
+    .split(';')
+    .forEach((style) => {
+      if (style) {
+        entries.push([...style.split(':').map((x) => x.trim())]);
+      }
+    });
+
+  return Object.fromEntries(entries);
 }
 
 module.exports = convertToObject;
